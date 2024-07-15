@@ -45,6 +45,13 @@ class DBReader {
             throw new FileReaderException("Attemtped to look up IPv6 using IPv4 database file. Aborting.");
         }
 
+        if($this->ipv6 === false) {
+            //NOTE: this "magic number" is ip2long(0.255.255.255)
+            if(ip2long($ip) <= 16777215){
+                throw new Exception("Attempted to look up ip in 0.0.0.0/8 range. Aborting.");
+            }
+        }
+
         $position = 0;
         $previous = array();
         $literal = $this->IP2Literal($ip);
